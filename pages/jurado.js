@@ -502,15 +502,17 @@ const EvaluationForm = ({
             <span className="text-xs text-gray-500">Máx: {criteria.max} puntos.</span>
           </div>
           <div className="w-full sm:w-24">
-            <input
-              type="number"
-              value={currentScores[key] || 0}
-              onChange={(e) => handleScoreChange(key, e.target.value)}
-              min="0"
-              max={criteria.max}
-              className="w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 text-center py-2 text-lg font-bold text-green-700"
-              disabled={isSaving}
-            />
+           <input
+                    type="number"
+                    value={currentScores[key] === 0 ? '' : currentScores[key] || ''}
+                    onChange={(e) => handleScoreChange(key, e.target.value)}
+                    onFocus={(e) => e.target.select()} // selecciona el número anterior al enfocar
+                    min="0"
+                    max={criteria.max}
+                    className="w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 text-center py-2 text-lg font-bold text-green-700"
+                    disabled={isSaving}
+                    />
+
           </div>
         </div>
       ))}
