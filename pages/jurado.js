@@ -487,7 +487,7 @@ const EvaluationForm = ({ project, currentScores, totalScore, handleScoreChange,
                                 onChange={(e) => handleScoreChange(key, e.target.value)}
                                 min="0"
                                 max={criteria.max}
-                                // SOLUCIÓN FINAL (CLASE ÚNICA Y NEGRO PURO)
+                                // SOLUCIÓN FINAL (CLASE ÚNICA Y NEGRO PUROsadasd)
                                 className="w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 text-center py-1 text-base font-extrabold text-black" 
                                 disabled={isSaving}
                             />
