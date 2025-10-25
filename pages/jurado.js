@@ -52,8 +52,8 @@ const JuradoPage = () => {
     const [userProfile, setUserProfile] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [assignedProjects, setAssignedProjects] = useState([]);
-    const [evaluations, setEvaluations] = useState({}); // {projectId: {evaluationData, docId}}
-    const [evaluationStatus, setEvaluationStatus] = useState({}); // {projectId: 'pending' | 'complete'}
+    const [evaluations, setEvaluations] = {}; // {projectId: {evaluationData, docId}}
+    const [evaluationStatus, setEvaluationStatus] = {}; // {projectId: 'pending' | 'complete'}
     const [currentProject, setCurrentProject] = useState(null);
     const [currentScores, setCurrentScores] = useState({});
     const [isSaving, setIsSaving] = useState(false);
@@ -470,23 +470,25 @@ const EvaluationForm = ({ project, currentScores, totalScore, handleScoreChange,
 
             <h3 className='text-lg font-semibold text-gray-700 border-b pb-2'>Criterios de Evaluación</h3>
 
-            <div className="space-y-4">
+            <div className="space-y-3"> {/* Cambio: Reducido space-y-4 a space-y-3 para compactar */}
                 {Object.entries(CRITERIA).map(([key, criteria]) => (
-                    <div key={key} className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div className="flex-1 mr-4 mb-2 sm:mb-0">
+                    // Cambio: Reducido padding de p-4 a p-3 para compactar
+                    <div key={key} className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200"> 
+                        <div className="flex-1 mr-4 mb-1 sm:mb-0"> {/* Reducido mb-2 a mb-1 */}
                             <label className="block text-sm font-medium text-gray-700">
                                 {criteria.name}
                             </label>
                             <span className="text-xs text-gray-500">Máx: {criteria.max} puntos.</span>
                         </div>
-                        <div className="w-full sm:w-24">
+                        <div className="w-full sm:w-20"> {/* Cambio: Reducido sm:w-24 a sm:w-20 para compactar */}
                             <input
                                 type="number"
                                 value={currentScores[key] || 0}
                                 onChange={(e) => handleScoreChange(key, e.target.value)}
                                 min="0"
                                 max={criteria.max}
-                                className="w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 text-center py-2 text-lg font-bold"
+                                // FIX DE VISIBILIDAD y COMPACTACIÓN: text-gray-900 añadido. py-2 text-lg cambiado a py-1 text-base
+                                className="w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 text-center py-1 text-base font-bold text-gray-900" 
                                 disabled={isSaving}
                             />
                         </div>
