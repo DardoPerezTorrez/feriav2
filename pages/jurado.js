@@ -87,7 +87,8 @@ const JuradoPage = () => {
 
             if (userSnap.exists()) {
                  const latestProfile = { id: userSnap.id, ...userSnap.data() };
-                 projectIds = latestProfile.assignedProjects || []; 
+                 // *** FIX 1: Aseguramos que assignedProjects es un ARRAY, no un objeto ***
+                 projectIds = Array.isArray(latestProfile.assignedProjects) ? latestProfile.assignedProjects : []; 
                  setUserProfile(latestProfile); 
             } else {
                  console.error("User profile not found in database.");
@@ -96,7 +97,7 @@ const JuradoPage = () => {
                  return;
             }
             
-            // Si no hay proyectos, sale inmediatamente y quita la carga
+            // *** FIX 2: Chequeo inmediato para evitar el TypeError al iterar un array vacío ***
             if (projectIds.length === 0) {
                 setAssignedProjects([]);
                 setEvaluationStatus({});
@@ -153,7 +154,7 @@ const JuradoPage = () => {
         } finally {
             setIsLoading(false);
         }
-    }, []); // userId ya no es dependencia directa porque se pasa como argumento
+    }, []); 
 
     // --- EFECTO 2: Iniciar la carga de datos una vez que la sesión está comprobada ---
     useEffect(() => {
@@ -257,8 +258,8 @@ const JuradoPage = () => {
     // Componente de Confirmación de Envío
     const ConfirmModal = ({ onClose, onConfirm, totalScore, projectName }) => {
         return (
-            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[60] p-4"> {/* Fondo más claro */}
-                <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-5 text-center border-t-4 border-blue-500"> {/* Compacto, borde azul */}
+            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[60] p-4">
+                <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-5 text-center border-t-4 border-blue-500">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Confirmar Evaluación</h3>
                     <p className="text-sm text-gray-700 mb-3">
                         Estás a punto de guardar la nota del proyecto **{projectName}**.
@@ -300,7 +301,6 @@ const JuradoPage = () => {
     
     // Si llegamos aquí, currentUserId tiene un valor válido.
     const userId = currentUserId; 
-    // --------------------------------------------------------
 
 
     return (
@@ -313,7 +313,7 @@ const JuradoPage = () => {
                 projectName={currentProject.name}
             />}
 
-            {/* --- ENCABEZADO SOLICITADO (Ahora se renderiza solo en el bloque seguro) --- */}
+            {/* --- ENCABEZADO SOLICITADO --- */}
             <header className="w-full max-w-4xl text-center py-4">
                 <h1 className="text-2xl font-extrabold text-green-600">EXPOFERIA MULTIDISCIPLINARIA</h1>
                 <p className="text-lg font-semibold text-green-700">U. E. JOSÉ BALLIVIÁN - A</p>
@@ -470,24 +470,23 @@ const EvaluationForm = ({ project, currentScores, totalScore, handleScoreChange,
 
             <h3 className='text-lg font-semibold text-gray-700 border-b pb-2'>Criterios de Evaluación</h3>
 
-            <div className="space-y-3"> {/* Cambio: Reducido space-y-4 a space-y-3 para compactar */}
+            <div className="space-y-3">
                 {Object.entries(CRITERIA).map(([key, criteria]) => (
-                    // Cambio: Reducido padding de p-4 a p-3 para compactar
                     <div key={key} className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200"> 
-                        <div className="flex-1 mr-4 mb-1 sm:mb-0"> {/* Reducido mb-2 a mb-1 */}
+                        <div className="flex-1 mr-4 mb-1 sm:mb-0">
                             <label className="block text-sm font-medium text-gray-700">
                                 {criteria.name}
                             </label>
                             <span className="text-xs text-gray-500">Máx: {criteria.max} puntos.</span>
                         </div>
-                        <div className="w-full sm:w-20"> {/* Cambio: Reducido sm:w-24 a sm:w-20 para compactar */}
+                        <div className="w-full sm:w-20">
                             <input
                                 type="number"
                                 value={currentScores[key] || 0}
                                 onChange={(e) => handleScoreChange(key, e.target.value)}
                                 min="0"
                                 max={criteria.max}
-                                // SOLUCIÓN FINAL (CLASE ÚNICA Y NEGRO PUROsadasd)
+                                // *** FIX 3: Solo una línea className y con color NEGRO (text-black) ***
                                 className="w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 text-center py-1 text-base font-extrabold text-black" 
                                 disabled={isSaving}
                             />
